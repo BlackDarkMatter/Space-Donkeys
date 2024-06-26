@@ -1,9 +1,13 @@
 import React from "react";
 
 const BurritosForDelivery = () => {
+  const submitForm = () => {
+    console.info("Oh you submitted the form!");
+  };
+
   return (
     <div className="align-on-center align-text-left">
-      <form>
+      <div>
         <label htmlFor="name">What's your name:</label>
         <br />
         <input type="text" id="name" name="fname" />
@@ -28,8 +32,8 @@ const BurritosForDelivery = () => {
           before arrival time
         </label>
         <br />
-        <input type="submit" />
-      </form>
+        <button onClick={submitForm}>Submit</button>
+      </div>
     </div>
   );
 };
