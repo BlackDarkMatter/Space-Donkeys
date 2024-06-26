@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { DeliveryService } from "../services/DeliveryService";
 
 const BurritosForDelivery = () => {
@@ -13,6 +13,14 @@ const BurritosForDelivery = () => {
   const submitForm = () => {
     DeliveryService.saveDeliveryList([delivery]);
   };
+
+  useEffect(() => {
+    DeliveryService.getDeliveryList().then((data) => {
+      if (data.length > 0) {
+        setDelivery(data[0]);
+      }
+    });
+  }, []);
 
   const updateDeliveryData = (prop, data) => {
     let newData = { ...delivery };
