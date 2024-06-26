@@ -1,6 +1,8 @@
+import utils from "../utils/utils";
+
 export const RestaurantService = {
   async getRestaurants() {
-    await delay(500);
+    await utils.delay(500);
     return [
       {
         id: 1,
@@ -17,8 +19,4 @@ export const RestaurantService = {
       },
     ];
   },
-};
-
-const delay = (delayInms) => {
-  return new Promise((resolve) => setTimeout(resolve, delayInms));
 };
