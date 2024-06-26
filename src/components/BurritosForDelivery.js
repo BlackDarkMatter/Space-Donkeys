@@ -1,6 +1,6 @@
 import React from "react";
 
-const DonkeyOnDelivery = () => {
+const BurritosForDelivery = () => {
   return (
     <div className="align-on-center align-text-left">
       <form>
@@ -34,4 +34,4 @@ const DonkeyOnDelivery = () => {
   );
 };
 
-export default DonkeyOnDelivery;
+export default BurritosForDelivery;

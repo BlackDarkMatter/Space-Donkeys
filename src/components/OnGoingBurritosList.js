@@ -1,6 +1,6 @@
 import React from "react";
 
-const OnGoingDonkeysList = () => {
+const OnGoingBurritosList = () => {
   return (
     <div className="align-on-center align-text-left">
       <table>
@@ -18,4 +18,4 @@ const OnGoingDonkeysList = () => {
   );
 };
 
-export default OnGoingDonkeysList;
+export default OnGoingBurritosList;
