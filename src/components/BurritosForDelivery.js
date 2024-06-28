@@ -1,5 +1,6 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { DeliveryService } from "../services/DeliveryService";
+import utils from "../utils/utils";
 
 const BurritosForDelivery = () => {
   const [delivery, setDelivery] = useState({
@@ -14,10 +15,20 @@ const BurritosForDelivery = () => {
     DeliveryService.saveDeliveryList([delivery]);
   };
 
+  let closeRequestsHour = useRef(null);
+
   useEffect(() => {
     DeliveryService.getDeliveryList().then((data) => {
       if (data.length > 0) {
         setDelivery(data[0]);
+        if (data[0].close) {
+          closeRequestsHour.current = utils.getClosingTime(
+            data[0].hour,
+            Number(data[0].minutesToClose)
+          );
+        } else {
+          closeRequestsHour.current = data[0].hour;
+        }
       }
     });
   }, []);
@@ -26,6 +37,23 @@ const BurritosForDelivery = () => {
     let newData = { ...delivery };
     newData[prop] = data;
     setDelivery(newData);
+  };
+
+  const canOrder = () => {
+    let can = "yes";
+    if (delivery.close && didTimePassedLimit()) {
+      can = "no";
+    }
+    window.alert(can);
+  };
+
+  const didTimePassedLimit = () => {
+    let currentDate = new Date();
+    let limitTime = new Date();
+    let splitedTime = closeRequestsHour.current.split(":");
+    limitTime.setHours(splitedTime[0], splitedTime[1]);
+
+    return currentDate.getTime() > limitTime.getTime();
   };
 
   return (
@@ -60,7 +88,17 @@ const BurritosForDelivery = () => {
           id="hour"
           name="fhour"
           value={delivery.hour}
-          onChange={(e) => updateDeliveryData("hour", e.target.value)}
+          onChange={(e) => {
+            updateDeliveryData("hour", e.target.value);
+            if (delivery.close) {
+              closeRequestsHour.current = utils.getClosingTime(
+                e.target.value,
+                Number(delivery.minutesToClose) || 0
+              );
+            } else {
+              closeRequestsHour.current = delivery.hour;
+            }
+          }}
         />
         <br />
         <label htmlFor="close">Automatically close requests?</label>
@@ -88,6 +126,7 @@ const BurritosForDelivery = () => {
         </label>
         <br />
         <button onClick={() => submitForm()}>Submit</button>
+        <button onClick={() => canOrder()}>Can order?</button>
       </div>
     </div>
   );
