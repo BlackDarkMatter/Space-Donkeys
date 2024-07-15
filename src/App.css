@@ -32,3 +32,11 @@
 .align-text-left {
   text-align: left;
 }
+
+.link-button {
+  background: none!important;
+  border: none;
+  color: -webkit-link;
+  text-decoration: underline;
+  cursor: pointer;
+}

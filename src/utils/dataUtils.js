@@ -3,7 +3,7 @@ import utils from "./utils";
 const DataUtils = {
   async readData(dataName) {
     await utils.delay(1000);
-    return JSON.parse(window.localStorage.getItem(dataName)) || [];
+    return JSON.parse(window.localStorage.getItem(dataName));
   },
 
   async writeData(dataName, data) {

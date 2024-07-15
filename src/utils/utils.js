@@ -7,7 +7,6 @@ const utils = {
     const splitedTime = currentTime.split(":");
     let time = new Date();
     time.setHours(splitedTime[0], splitedTime[1]);
-    console.info(time.getTime());
     return time.getHours() + ":" + time.getMinutes();
   },
 };

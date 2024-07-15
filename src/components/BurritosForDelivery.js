@@ -2,9 +2,9 @@ import React, { useEffect, useRef, useState } from "react";
 import { DeliveryService } from "../services/DeliveryService";
 import utils from "../utils/utils";
 
-const BurritosForDelivery = () => {
+const BurritosForDelivery = ({ currentUser }) => {
   const [delivery, setDelivery] = useState({
-    name: "",
+    name: currentUser.name,
     restaurant: 1,
     hour: "",
     close: false,
@@ -67,6 +67,7 @@ const BurritosForDelivery = () => {
           name="fname"
           value={delivery.name}
           onChange={(e) => updateDeliveryData("name", e.target.value)}
+          disabled
         />
         <br />
         <label htmlFor="restaurant">Where are you picking burritos from:</label>
@@ -111,20 +112,26 @@ const BurritosForDelivery = () => {
           onChange={() => updateDeliveryData("close", !delivery.close)}
         />
         <br />
-        <label htmlFor="timeToClose">
-          Close request on
-          <input
-            type="number"
-            id="timeToClose"
-            name="ftimeToClose"
-            value={delivery.minutesToClose}
-            onChange={(e) =>
-              updateDeliveryData("minutesToClose", e.target.value)
-            }
-          />
-          minutes before arrival time
-        </label>
-        <br />
+        {delivery.close ? (
+          <div>
+            <label htmlFor="timeToClose">
+              Close request on
+              <input
+                type="number"
+                id="timeToClose"
+                name="ftimeToClose"
+                value={delivery.minutesToClose}
+                onChange={(e) =>
+                  updateDeliveryData("minutesToClose", e.target.value)
+                }
+              />
+              minutes before arrival time
+            </label>
+            <br />
+          </div>
+        ) : (
+          ""
+        )}
         <button onClick={() => submitForm()}>Submit</button>
         <button onClick={() => canOrder()}>Can order?</button>
       </div>

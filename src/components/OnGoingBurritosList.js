@@ -1,6 +1,15 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { DeliveryService } from "../services/DeliveryService";
 
 const OnGoingBurritosList = () => {
+  const [onGoingDeliveries, setOnGoingDeliveries] = useState([]);
+
+  useEffect(() => {
+    DeliveryService.getDeliveryList().then((data) =>
+      setOnGoingDeliveries(data)
+    );
+  }, []);
+
   return (
     <div className="align-on-center align-text-left">
       <table>
@@ -12,7 +21,16 @@ const OnGoingBurritosList = () => {
             <th>Actions</th>
           </tr>
         </thead>
-        <tbody></tbody>
+        <tbody>
+          {onGoingDeliveries.map((delivery) => (
+            <tr>
+              <td>{delivery.name}</td>
+              <td>{delivery.restaurant}</td>
+              <td>{delivery.hour}</td>
+              <td></td>
+            </tr>
+          ))}
+        </tbody>
       </table>
     </div>
   );

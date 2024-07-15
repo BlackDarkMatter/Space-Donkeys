@@ -4,7 +4,7 @@ const dataName = "deliveryList";
 
 export const DeliveryService = {
   async getDeliveryList() {
-    return await DataUtils.readData(dataName);
+    return (await DataUtils.readData(dataName)) || [];
   },
 
   async saveDeliveryList(data) {
