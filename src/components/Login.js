@@ -1,12 +1,8 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { UserService } from "../services/UserService";
 
-const Login = ({ user, setUser }) => {
+const Login = ({ user, setUser, userList, setUserList }) => {
   const [isNew, setIsNew] = useState(true);
-  const [userList, setUserList] = useState([]);
-  useEffect(() => {
-    UserService.getUserList().then((x) => setUserList(x));
-  }, []);
 
   const submitForm = () => {
     let newUser = { ...user };
@@ -18,11 +14,15 @@ const Login = ({ user, setUser }) => {
       errorMessage += "The username can't be empty\n";
     }
     if (user.password === "") {
-      errorMessage += "The password can't be empty";
+      errorMessage += "The password can't be empty\n";
+    }
+    if (userList.find((x) => x.username == user.username)) {
+      errorMessage += "The username already exists";
     }
     if (errorMessage.length === 0) {
       newUser.saved = true;
       setUser(newUser);
+      setUserList([...userList, newUser]);
       UserService.saveCurrentUser(newUser);
       window.alert("Success!");
     } else {

@@ -1,37 +1,37 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useRef, useState } from "react";
 import { DeliveryService } from "../services/DeliveryService";
-import utils from "../utils/utils";
 
-const BurritosForDelivery = ({ currentUser }) => {
+const BurritosForDelivery = ({ currentUser, restaurantList }) => {
   const [delivery, setDelivery] = useState({
-    name: currentUser.name,
-    restaurant: 1,
+    user: currentUser.username,
+    restaurant: "0",
     hour: "",
     close: false,
-    minutesToClose: "",
   });
 
   const submitForm = () => {
-    DeliveryService.saveDeliveryList([delivery]);
+    let errorMessage = "";
+    if (delivery.restaurant === "0") {
+      errorMessage += "Please pick a restaurant\n";
+    }
+    if (delivery.hour === "") {
+      errorMessage += "Please set a time limit to make orders";
+    }
+    if (errorMessage.length === 0) {
+      DeliveryService.saveDeliveryList([delivery]);
+      window.alert("Success! Now you can receive orders!");
+      setDelivery({
+        user: currentUser.username,
+        restaurant: "0",
+        hour: "",
+        close: false,
+      });
+    } else {
+      window.alert(errorMessage);
+    }
   };
 
   let closeRequestsHour = useRef(null);
-
-  useEffect(() => {
-    DeliveryService.getDeliveryList().then((data) => {
-      if (data.length > 0) {
-        setDelivery(data[0]);
-        if (data[0].close) {
-          closeRequestsHour.current = utils.getClosingTime(
-            data[0].hour,
-            Number(data[0].minutesToClose)
-          );
-        } else {
-          closeRequestsHour.current = data[0].hour;
-        }
-      }
-    });
-  }, []);
 
   const updateDeliveryData = (prop, data) => {
     let newData = { ...delivery };
@@ -59,17 +59,6 @@ const BurritosForDelivery = ({ currentUser }) => {
   return (
     <div className="align-on-center align-text-left">
       <div>
-        <label htmlFor="name">What's your name:</label>
-        <br />
-        <input
-          type="text"
-          id="name"
-          name="fname"
-          value={delivery.name}
-          onChange={(e) => updateDeliveryData("name", e.target.value)}
-          disabled
-        />
-        <br />
         <label htmlFor="restaurant">Where are you picking burritos from:</label>
         <br />
         <select
@@ -79,10 +68,12 @@ const BurritosForDelivery = ({ currentUser }) => {
           onChange={(e) => updateDeliveryData("restaurant", e.target.value)}
         >
           <option value="0">None</option>
-          <option value="1">Default</option>
+          {restaurantList.map((restaurant) => (
+            <option value={restaurant.id}>{restaurant.name}</option>
+          ))}
         </select>
         <br />
-        <label htmlFor="hour">Enter arrival time to the place:</label>
+        <label htmlFor="hour">Enter orders time limit:</label>
         <br />
         <input
           type="time"
@@ -91,14 +82,7 @@ const BurritosForDelivery = ({ currentUser }) => {
           value={delivery.hour}
           onChange={(e) => {
             updateDeliveryData("hour", e.target.value);
-            if (delivery.close) {
-              closeRequestsHour.current = utils.getClosingTime(
-                e.target.value,
-                Number(delivery.minutesToClose) || 0
-              );
-            } else {
-              closeRequestsHour.current = delivery.hour;
-            }
+            closeRequestsHour.current = delivery.hour;
           }}
         />
         <br />
@@ -112,28 +96,10 @@ const BurritosForDelivery = ({ currentUser }) => {
           onChange={() => updateDeliveryData("close", !delivery.close)}
         />
         <br />
-        {delivery.close ? (
-          <div>
-            <label htmlFor="timeToClose">
-              Close request on
-              <input
-                type="number"
-                id="timeToClose"
-                name="ftimeToClose"
-                value={delivery.minutesToClose}
-                onChange={(e) =>
-                  updateDeliveryData("minutesToClose", e.target.value)
-                }
-              />
-              minutes before arrival time
-            </label>
-            <br />
-          </div>
-        ) : (
-          ""
-        )}
         <button onClick={() => submitForm()}>Submit</button>
-        <button onClick={() => canOrder()}>Can order?</button>
+        <button onClick={() => canOrder()} style={{ display: "none" }}>
+          Can order?
+        </button>
       </div>
     </div>
   );

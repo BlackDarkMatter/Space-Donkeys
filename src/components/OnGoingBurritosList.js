@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { DeliveryService } from "../services/DeliveryService";
 
-const OnGoingBurritosList = () => {
+const OnGoingBurritosList = ({ userList, restaurantList }) => {
   const [onGoingDeliveries, setOnGoingDeliveries] = useState([]);
 
   useEffect(() => {
@@ -12,25 +12,49 @@ const OnGoingBurritosList = () => {
 
   return (
     <div className="align-on-center align-text-left">
-      <table>
+      <table className="orders-table">
         <thead>
           <tr>
             <th>Who is bringing burritos?</th>
-            <th>Burritos from</th>
-            <th>Arrival time to the place</th>
+            <th>Burritos from...</th>
+            <th>Time limit to order</th>
+            <th>Can order?</th>
             <th>Actions</th>
           </tr>
         </thead>
-        <tbody>
-          {onGoingDeliveries.map((delivery) => (
+        {onGoingDeliveries.length > 0 ? (
+          <tbody>
+            {onGoingDeliveries.map((delivery) => (
+              <tr>
+                <td>
+                  {userList.find((x) => x.username === delivery.user)?.name}
+                </td>
+                <td>
+                  {
+                    restaurantList.find(
+                      (x) => x.id === Number(delivery.restaurant)
+                    )?.name
+                  }
+                </td>
+                <td>{delivery.hour}</td>
+                <td>
+                  <span className="dot available"></span>
+                </td>
+                <td>
+                  <button className="link-button">Order</button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        ) : (
+          <tbody>
             <tr>
-              <td>{delivery.name}</td>
-              <td>{delivery.restaurant}</td>
-              <td>{delivery.hour}</td>
-              <td></td>
+              <td className="colspan-row" colSpan={5}>
+                There is no data
+              </td>
             </tr>
-          ))}
-        </tbody>
+          </tbody>
+        )}
       </table>
     </div>
   );

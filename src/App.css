@@ -40,3 +40,23 @@
   text-decoration: underline;
   cursor: pointer;
 }
+
+.orders-table {
+  width: 80%;
+}
+
+.dot {
+  height: 25px;
+  width: 25px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.available {
+  background-color: #bbb;
+}
+
+.colspan-row {
+  display: table-cell;
+  text-align: center;
+}

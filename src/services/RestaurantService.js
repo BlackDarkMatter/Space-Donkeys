@@ -6,7 +6,7 @@ export const RestaurantService = {
     return [
       {
         id: 1,
-        name: "Burritos Andariego",
+        name: "Burritos De Villa Ahumada",
         menu: [
           { id: 1, dish: "Burrito de asado", price: "25" },
           { id: 2, dish: "Burrito de picadillo", price: "25" },
