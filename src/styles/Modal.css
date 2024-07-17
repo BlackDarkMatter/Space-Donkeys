@@ -1,0 +1,20 @@
+.close-button-container {
+    width: 100%;
+  }
+  
+  .close-button {
+    float: right;
+    border: none;
+    border-radius: 50%;
+    height: 25px;
+    width: 25px;
+  }
+  
+  .modal-dialog {
+    width: 50vw;
+    top: 10%;
+  }
+  
+  .modal-content {
+    padding: 1rem;
+  }

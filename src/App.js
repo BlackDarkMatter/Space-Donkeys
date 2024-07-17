@@ -14,11 +14,11 @@ function App() {
   const [currentAction, setCurrentAction] = useState(actionOptions.UNSET);
   const [restaurantList, setRestaurantList] = useState([]);
 
+  const emptyUser = { name: "", username: "", password: "", saved: false };
+
   useEffect(() => {
     UserService.getCurrentUser().then((x) => {
-      setCurrentUser(
-        x || { name: "", username: "", password: "", saved: false }
-      );
+      setCurrentUser(x || emptyUser);
     });
   }, []);
 
@@ -29,6 +29,11 @@ function App() {
   useEffect(() => {
     RestaurantService.getRestaurants().then((x) => setRestaurantList(x));
   }, []);
+
+  const logout = () => {
+    UserService.logout();
+    setCurrentUser(emptyUser);
+  };
 
   return (
     <>
@@ -48,7 +53,10 @@ function App() {
           <div className="App">
             <header className="App-header">
               <img src={logo} className="App-logo" alt="logo" />
-              <p>Welcome {currentUser.name} to Space Burritos!</p>
+              <div className="align-on-center">
+                <p>Welcome {currentUser.name} to Space Burritos!</p>&nbsp;
+                <button onClick={logout}>logout</button>
+              </div>
             </header>
             <div>
               <h4>What do you want to do?</h4>

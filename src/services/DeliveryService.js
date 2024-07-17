@@ -13,9 +13,18 @@ export const DeliveryService = {
 
   async saveDelivery(data) {
     const deliveryList = await this.getDeliveryList();
-    this.saveDeliveryList([
-      ...deliveryList,
-      { ...data, id: Math.max(deliveryList.map((x) => x.id)) + 1 || 1 },
-    ]);
+    let dataIndex = deliveryList.findIndex((x) => x.id === data.id);
+    if (dataIndex >= 0) {
+      this.saveDeliveryList([
+        ...deliveryList.slice(0, dataIndex),
+        data,
+        ...deliveryList.slice(dataIndex + 1),
+      ]);
+    } else {
+      this.saveDeliveryList([
+        ...deliveryList,
+        { ...data, id: Math.max(deliveryList.map((x) => x.id)) + 1 || 1 },
+      ]);
+    }
   },
 };

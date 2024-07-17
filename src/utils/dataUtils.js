@@ -10,6 +10,11 @@ const DataUtils = {
     await utils.delay(1000);
     window.localStorage.setItem(dataName, JSON.stringify(data));
   },
+
+  async deleteData(dataName) {
+    await utils.delay(1000);
+    window.localStorage.removeItem(dataName);
+  },
 };
 
 export default DataUtils;

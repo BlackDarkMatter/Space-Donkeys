@@ -1,15 +1,8 @@
-import React, { useEffect, useState } from "react";
-import { DeliveryService } from "../services/DeliveryService";
+import React from "react";
 import utils from "../utils/utils";
 
 const OnGoingBurritosList = ({ userList, restaurantList }) => {
-  const [onGoingDeliveries, setOnGoingDeliveries] = useState([]);
-
-  useEffect(() => {
-    DeliveryService.getDeliveryList().then((data) =>
-      setOnGoingDeliveries(data)
-    );
-  }, []);
+  const onGoingDeliveries = [];
 
   return (
     <div className="align-on-center align-text-left">
