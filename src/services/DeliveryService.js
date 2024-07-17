@@ -10,4 +10,12 @@ export const DeliveryService = {
   async saveDeliveryList(data) {
     await DataUtils.writeData(dataName, data);
   },
+
+  async saveDelivery(data) {
+    const deliveryList = await this.getDeliveryList();
+    this.saveDeliveryList([
+      ...deliveryList,
+      { ...data, id: Math.max(deliveryList.map((x) => x.id)) + 1 || 1 },
+    ]);
+  },
 };

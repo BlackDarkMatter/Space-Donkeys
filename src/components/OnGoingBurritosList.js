@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { DeliveryService } from "../services/DeliveryService";
+import utils from "../utils/utils";
 
 const OnGoingBurritosList = ({ userList, restaurantList }) => {
   const [onGoingDeliveries, setOnGoingDeliveries] = useState([]);
@@ -25,7 +26,7 @@ const OnGoingBurritosList = ({ userList, restaurantList }) => {
         {onGoingDeliveries.length > 0 ? (
           <tbody>
             {onGoingDeliveries.map((delivery) => (
-              <tr>
+              <tr key={delivery.id}>
                 <td>
                   {userList.find((x) => x.username === delivery.user)?.name}
                 </td>
@@ -36,12 +37,26 @@ const OnGoingBurritosList = ({ userList, restaurantList }) => {
                     )?.name
                   }
                 </td>
-                <td>{delivery.hour}</td>
+                <td>{utils.formatHourToLocal(delivery.hour)}</td>
                 <td>
-                  <span className="dot available"></span>
+                  {!utils.didTimePassedLimit(delivery.hour) ? (
+                    <span className="dot available"></span>
+                  ) : delivery.autoClose ? (
+                    <span className="dot closed"></span>
+                  ) : (
+                    <span className="dot unknown"></span>
+                  )}
                 </td>
                 <td>
-                  <button className="link-button">Order</button>
+                  <button
+                    className="link-button"
+                    disabled={
+                      utils.didTimePassedLimit(delivery.hour) &&
+                      delivery.autoClose
+                    }
+                  >
+                    Order
+                  </button>
                 </td>
               </tr>
             ))}
